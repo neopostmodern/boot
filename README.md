@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="BOOT: Blender for Object Oriented Theatre" src="./misc/boot-logo.png" width="400px" />
+<img alt="BOOT: Blender for Object Oriented Theatre" src="./misc/boot-logo.avif" width="400px" />
 <br/>
 A pipeline to orchestrate physical automated object theater, using Blender
 </p>
