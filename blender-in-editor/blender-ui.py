@@ -1,6 +1,7 @@
 import bpy
 import sys
-import imp
+from importlib import reload
+from types import ModuleType
 
 # this path can't be managed from config, because we're inside Blender and have no notion of where the config even is
 RELATIVE_PATH_TO_CODEBASE_ROOT = "../scripting"
@@ -12,6 +13,26 @@ if scripts_path not in sys.path:
 import blender.blender_utils as blender_utils
 
 
+def recursive_module_reload(module):
+    """from: https://stackoverflow.com/a/17194836"""
+    if module.__name__.startswith("bpy") or module.__name__ in ["os", "builtins"]:
+        return
+
+    try:
+        reload(module)
+    except ImportError:
+        return
+
+    for attribute_name in dir(module):
+        attribute = getattr(module, attribute_name)
+        if type(attribute) is ModuleType:
+            recursive_module_reload(attribute)
+
+
+def reload_blender_utils():
+    recursive_module_reload(blender_utils)
+
+
 class RenderOperator(bpy.types.Operator):
     """Generate files only locally"""
 
@@ -19,7 +40,7 @@ class RenderOperator(bpy.types.Operator):
     bl_label = "Render Operator"
 
     def execute(self, context):
-        imp.reload(blender_utils)
+        reload_blender_utils()
         blender_utils.export()
         return {"FINISHED"}
 
@@ -35,7 +56,7 @@ class RenderUploadOperator(bpy.types.Operator):
     bl_label = "Render Upload Operator"
 
     def execute(self, context):
-        imp.reload(blender_utils)
+        reload_blender_utils()
         blender_utils.export()
         blender_utils.upload_render()
         return {"FINISHED"}
@@ -54,7 +75,7 @@ class PlayOperator(bpy.types.Operator):
     bl_label = "Play"
 
     def execute(self, context):
-        imp.reload(blender_utils)
+        reload_blender_utils()
         blender_utils.trigger_remote_play()
         return {"FINISHED"}
 
