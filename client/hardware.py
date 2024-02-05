@@ -154,10 +154,10 @@ class Servos:
         return int(angle * Servos.FREQUENCY / 10)
 
     @staticmethod
-    def estimate_travel_time(servo_name: str, angle: float):
+    def estimate_travel_time(servo_name: ServoName, angle: float):
         return abs(angle) * Servos.DEFAULT_TRAVEL_SPEED
 
-    def set(self, servo_name: str, angle: float):
+    def set(self, servo_name: ServoName, angle: float):
         try:
             servo_config = ServoConfigs[servo_name]
         except KeyError:
@@ -187,7 +187,11 @@ class Drums:
         self._servos = servos
 
     def hit(
-        self, servo_name: str, resting_angle: float, hit_angle: float, travel_time=None
+        self,
+        servo_name: ServoName,
+        resting_angle: float,
+        hit_angle: float,
+        travel_time=None,
     ):
         self._servos.set(servo_name, hit_angle)
         sleep(
