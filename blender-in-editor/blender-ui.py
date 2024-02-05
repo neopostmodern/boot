@@ -3,6 +3,30 @@ import sys
 from importlib import reload
 from types import ModuleType
 
+stdout = sys.stdout
+
+# todo: this STDOUT hack causes the blender UI to disappear when invoking `bpy.ops.script.reload()` – need to find a workaround-workaround
+class new_stdout(object):
+    """from: https://stackoverflow.com/a/17601387"""
+
+    def write(*args, **kwargs):
+        # do whatever
+
+        """from https://blender.stackexchange.com/a/142317"""
+        for window in bpy.context.window_manager.windows:
+            screen = window.screen
+            for area in screen.areas:
+                if area.type == "CONSOLE":
+                    override = {"window": window, "screen": screen, "area": area}
+                    bpy.ops.console.scrollback_append(
+                        override,
+                        text=str(" ".join([str(x) for x in args[1:]])),
+                        type="OUTPUT",
+                    )
+
+
+sys.stdout = new_stdout()
+
 # this path can't be managed from config, because we're inside Blender and have no notion of where the config even is
 RELATIVE_PATH_TO_CODEBASE_ROOT = "../scripting"
 
