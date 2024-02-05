@@ -5,7 +5,7 @@ from types import ModuleType
 
 stdout = sys.stdout
 
-# todo: this STDOUT hack causes the blender UI to disappear when invoking `bpy.ops.script.reload()` – need to find a workaround-workaround
+
 class new_stdout(object):
     """from: https://stackoverflow.com/a/17601387"""
 
@@ -17,12 +17,13 @@ class new_stdout(object):
             screen = window.screen
             for area in screen.areas:
                 if area.type == "CONSOLE":
-                    override = {"window": window, "screen": screen, "area": area}
-                    bpy.ops.console.scrollback_append(
-                        override,
-                        text=str(" ".join([str(x) for x in args[1:]])),
-                        type="OUTPUT",
-                    )
+                    with bpy.context.temp_override(
+                        window=window, screen=screen, area=area
+                    ):
+                        bpy.ops.console.scrollback_append(
+                            text=str(" ".join([str(x) for x in args[1:]])),
+                            type="OUTPUT",
+                        )
 
 
 sys.stdout = new_stdout()
