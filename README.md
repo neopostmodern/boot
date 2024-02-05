@@ -6,15 +6,15 @@ A pipeline to orchestrate physical automated object theater, using Blender
 
 ## Aim
 
-This project enables you to plan, edit, export and perform automated object- and puppet theatre by 
+This project enables you to plan, edit, export and perform automated object- and puppet theatre by
 creating a 1:1 virtual replica of the physical installation. You can thus benefit from having a *single source of truth*
-for all aspects of the play while enjoying the flexibility and expressivity of Blender for editing arrangement, acting, 
-audio and everything else. During editing you can preview the entire¹ play virtually before exporting it to the physical 
+for all aspects of the play while enjoying the flexibility and expressivity of Blender for editing arrangement, acting,
+audio and everything else. During editing you can preview the entire¹ play virtually before exporting it to the physical
 environment.
 
 ## Terminology
 
-Missing and subject to change. 
+Missing and subject to change.
 
 Currently:
 
@@ -25,7 +25,8 @@ Currently:
 
 ### Packages
 
-The project is based on recent-ish Python 3 and recent-ish Blender 3. A series of native packages are expected to be installed and will be documented here eventually.
+The project is based on recent-ish Python 3 and recent-ish Blender 3. A series of native packages are expected to be
+installed and will be documented here eventually.
 
 ### Python dependencies
 
@@ -37,7 +38,7 @@ Some dependencies have been copied from legacy codebases instead of being instal
 
 Create a `config/config.json` locally on all devices, currently undocumented.
 
-This file contains all environment information about the machine where Blender is used to edit scenes and the 
+This file contains all environment information about the machine where Blender is used to edit scenes and the
 embedded computer (with GPIO) used to perform the final play.
 
 ## Blender setup
@@ -47,7 +48,7 @@ You might need to adjust the relative path to this project at the top of the fil
 
 ### Blender scene setup: custom properties
 
-Digital (Blender) entities are mapped to physical objects (e.g. motors) and certain functionalities 
+Digital (Blender) entities are mapped to physical objects (e.g. motors) and certain functionalities
 via custom properties. To add a custom property go the *Object properties* tab, with the respective name
 (as documented below for each feature) and a unique ID or a parameter as value.
 Annotated objects are auto-discovered based on these properties and – if applicable – included in the export.
@@ -73,9 +74,9 @@ Adding text strips to the sequence allow you to trigger a variety of scriptable 
 
 A trigger consists of a *type*.
 It is optionally followed by a colon followed by a an *expression*.
-If there is an expression, it can optionally be followed by a semicolon and one or more semicolon-separated 
-*expression arguments*. 
-The expression arguments do not have a standardized format. 
+If there is an expression, it can optionally be followed by a semicolon and one or more semicolon-separated
+*expression arguments*.
+The expression arguments do not have a standardized format.
 The separators cannot be escaped.
 
 Most triggers activate on their starting frame and have no concept of length.
@@ -101,7 +102,7 @@ Unknown types result in a printed warning.
 
 ### Audio
 
-Audio channel number and layout is currently hardcoded to 3 mono channels in the sequence exported as three stereo 
+Audio channel number and layout is currently hardcoded to 3 mono channels in the sequence exported as three stereo
 channels, organized as 8× mono in one audiofile per chunk. (Audio chunking not documented yet.)
 
 ## Workflow
@@ -111,17 +112,18 @@ channels, organized as 8× mono in one audiofile per chunk. (Audio chunking not 
 - Add the Blender script within the Blender UI (see above) and execute it once
 - Add custom properties to some objects (see above) and keyframe their movement (if applicable)
 - Add a sequence with:
-  - text strips for events and transition logic
-  - audio
+    - text strips for events and transition logic
+    - audio
 - Hit the "Render & upload" button to transfer audio & movement to the "client" SBC
-  - This step will "bake" audio-based mouth movements – use the "Render" button to bake without uploading
+    - This step will "bake" audio-based mouth movements – use the "Render" button to bake without uploading
 - Press play in your physical setup or from the Blender UI to view your *physical* play
 
 ## Directory structures
 
 ### Host / Blender
 
-The relative path from the Blender file to the sourcecode root is set at the top of `blender-in-editor/blender-ui.py` (see above). The default layout assumed is:
+The relative path from the Blender file to the sourcecode root is set at the top of `blender-in-editor/blender-ui.py` (
+see above). The default layout assumed is:
 
 ```
 blender-files/
@@ -132,7 +134,8 @@ boot/
 
 ### Client SBC
 
-In the config the absolute paths and subfolder names for various media types can be set. Currently it's rather chaotic and non-standardized, so below is a documentation of something that worked, not how it should be:
+In the config the absolute paths and subfolder names for various media types can be set. Currently it's rather chaotic
+and non-standardized, so below is a documentation of something that worked, not how it should be:
 
 ```
 boot/
@@ -143,11 +146,9 @@ render/ (absolute path in config)
 midi/ (absolute path in config)
 ```
 
-
-
 ## Limitations and outlook
 
-Currently all physical actions must be controlled from a single SBC. 
+Currently all physical actions must be controlled from a single SBC.
 Audio is played through a single 8-channel soundcard.
 Servos are the only motor type supported.
 All triggers/effects are hardcoded.
@@ -162,6 +163,7 @@ None that I know of – if you find any please let me know!
 
 ## Notes
 
-¹ Well, mostly. If you use logic and transitions that depend on sensors / physical circumstances or execute code 
+¹ Well, mostly. If you use logic and transitions that depend on sensors / physical circumstances or execute code
 snippets this will not hold. Stubbing is planned, but not yet implemented.   
-² Consider [boycotting Raspberry Pi and using an alternative board](https://social.platypush.tech/@blacklight/109480876474810276)
+²
+Consider [boycotting Raspberry Pi and using an alternative board](https://social.platypush.tech/@blacklight/109480876474810276)

@@ -1,5 +1,0 @@
-from constants import Config
-
-config = {
-  Config.THREADING: True
-}

@@ -1,43 +1,52 @@
 html {
-  background-color: #111;
-  --color: lime;
+    background-color: #111;
+    --color: lime;
 }
+
 * {
-  font-family: "TeX Gyre Cursor", monospace;
-  color: var(--color);
+    font-family: "TeX Gyre Cursor", monospace;
+    color: var(--color);
 }
+
 body {
-  max-width: 100em;
-  margin: 5em auto;
-  padding: 2em;
+    max-width: 100em;
+    margin: 5em auto;
+    padding: 2em;
 }
+
 h1 {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
 }
+
 @media (min-width: 500px) {
-  main {
-    display: flex;
-    gap: 2rem;
-  }
-  main > div {
-    max-height: calc(100vh - 14em);
-    overflow-y: scroll;
-  }
+    main {
+        display: flex;
+        gap: 2rem;
+    }
+
+    main > div {
+        max-height: calc(100vh - 14em);
+        overflow-y: scroll;
+    }
 }
+
 form {
-  border: 1px solid var(--color);
-  padding: 1em;
-  margin-bottom: 1em;
+    border: 1px solid var(--color);
+    padding: 1em;
+    margin-bottom: 1em;
 }
+
 form > div {
-  display: flex;
+    display: flex;
 }
+
 input, button {
-  background-color: transparent;
-  border: 1px solid var(--color);
+    background-color: transparent;
+    border: 1px solid var(--color);
 }
+
 button {
-  margin-left: auto;
+    margin-left: auto;
 }
