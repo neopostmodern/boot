@@ -4,18 +4,15 @@ import os.path
 
 import mido
 
+from config.config import config
 from .constants import (
     MidiChannel,
     MidiMessageType,
-    ChordType,
-    ChordMidiNote,
     DrumMidiNote,
-    LedExtensionPin,
     MIDI_MAPPING_CHORDS,
     RENDER_BASE_PATH,
 )
 from .exec import threadable
-from .audio import Audio
 
 
 def system_music_files(language):
