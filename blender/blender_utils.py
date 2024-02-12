@@ -141,7 +141,7 @@ def bake_speech_movements():
                 context,
                 filepath=get_master_track_file_name(bake_object["bake"]),
                 release=0.3,
-                threshold=0.5,
+                threshold=0.1,
             )
             bpy.ops.graph.bake(context)
             bpy.ops.graph.unbake(context)
