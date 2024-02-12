@@ -21,13 +21,17 @@
             const section = document.createElement('section')
             section.innerHTML = `<h2>${subsystemName}</h2>
 ${Object.entries(subsystem).map(([methodName, {arguments: methodArguments, hints}]) => {
+                let extraInputs;
+                if (hints[0] && hints[0].type === 'servo' && hints[0].min_angle && hints[0].max_angle) {
+                    extraInputs = `<input class="slider" name="angle" type="range" min="${hints[0].min_angle}" max="${hints[0].max_angle}" value="${((hints[0].min_angle + hints[0].max_angle) / 2).toFixed(0)}" />`;
+                }
                 return `<form>
 <div>
   ${methodName}
   <button>→</button>
 </div>
 <input type="hidden" name="method" value="${subsystemName}.${methodName}" />
-${methodArguments.map(argument => `<input name="${argument.name}" placeholder="${argument.name}" />`).join('\n')}
+${extraInputs || methodArguments.map(argument => `<input name="${argument.name}" placeholder="${argument.name}" />`).join('\n')}
 ${hints.map(hint => `<div>${JSON.stringify(hint)}</div>`)}
   </form>`
             }).join('\n')}`
@@ -36,20 +40,28 @@ ${hints.map(hint => `<div>${JSON.stringify(hint)}</div>`)}
     })()
 
     setTimeout(() => {
+        const submitForm = async (form) => {
+            const data = new FormData(form)
+            let url = '/exec?' + [...data.entries()].map(([key, value]) => `${key}=${value}`).join('&')
+            console.log(url)
+            const commandResult = await fetch(url)
+            const commandLog = await commandResult.text()
+            const logElement = document.querySelector('#log')
+            const logEntry = document.createElement('pre')
+            logEntry.innerText = commandLog
+            logElement.appendChild(logEntry)
+        }
+
         [...document.querySelectorAll('form')].forEach(form => {
-            // console.log('form', form)
-            form.addEventListener('submit', async (event) => {
+            form.addEventListener('submit', (event) => {
                 event.preventDefault();
 
-                const data = new FormData(form)
-                let url = '/exec?' + [...data.entries()].map(([key, value]) => `${key}=${value}`).join('&')
-                console.log(url)
-                const commandResult = await fetch(url)
-                const commandLog = await commandResult.text()
-                const logElement = document.querySelector('#log')
-                const logEntry = document.createElement('pre')
-                logEntry.innerText = commandLog
-                logElement.appendChild(logEntry)
+                submitForm(form);
+            })
+        })
+        ;[...document.querySelectorAll('.slider')].forEach(slider => {
+            slider.addEventListener('input', () => {
+                submitForm(slider.parentElement);
             })
         })
     }, 1000)
