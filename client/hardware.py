@@ -112,7 +112,14 @@ class StartButtons:
             raise ValueError("Unknown language: " + language)
 
     def subscribe(self, language, callback):
-        if language == Language.GERMAN:
+        if language == Language.ENGLISH:
+            GPIO.add_event_detect(
+                OnboardPin.START_BUTTON_EN_SWITCH,
+                GPIO.FALLING,
+                bouncetime=1000,
+                callback=callback,
+            )
+        elif language == Language.GERMAN:
             GPIO.add_event_detect(
                 OnboardPin.START_BUTTON_DE_SWITCH,
                 GPIO.FALLING,
@@ -272,6 +279,7 @@ class Hardware:
         def on_finish():
             print("Finish!")
             self.start_buttons.turn_LED_on(Language.GERMAN)
+            self.start_buttons.turn_LED_on(Language.ENGLISH)
             self.led_extension.turn_all_off()
             self.organ.turn_off()
             self.psu.turn_off()
@@ -281,7 +289,10 @@ class Hardware:
             # todo: switch language based on channel
             print(f"Hardware play triggered (channel {channel})!")
             sleep(0.1)
-            if not self.start_buttons.probe(Language.GERMAN):
+            if not (
+                self.start_buttons.probe(Language.GERMAN)
+                or self.start_buttons.probe(Language.ENGLISH)
+            ):
                 print(">> False alarm.")
                 return
 
@@ -293,7 +304,10 @@ class Hardware:
             self._play_lock = True
             self.psu.turn_on()
             self.start_buttons.turn_LED_off(Language.GERMAN)
+            self.start_buttons.turn_LED_off(Language.ENGLISH)
             self.performance.play(finish_callback=on_finish)
 
         self.start_buttons.turn_LED_on(Language.GERMAN)
+        self.start_buttons.turn_LED_on(Language.ENGLISH)
         self.start_buttons.subscribe(Language.GERMAN, play_wrapper)
+        self.start_buttons.subscribe(Language.ENGLISH, play_wrapper)
