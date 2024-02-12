@@ -95,7 +95,7 @@ ServoConfigs = {
         ServoSide.LEFT, ServosLeftPin.CROCO_BASE_LEFT
     ),
     ServoName.CROCO_JAW_RIGHT: ServoConfig(
-        ServoSide.RIGHT, ServosRightPin.CROCO_JAW_RIGHT, min_angle=32, max_angle=55
+        ServoSide.RIGHT, ServosRightPin.CROCO_JAW_RIGHT, min_angle=40, max_angle=60
     ),
     ServoName.CROCO_JAW_CENTER: ServoConfig(
         ServoSide.LEFT, ServosLeftPin.CROCO_JAW_CENTER, min_angle=45, max_angle=62

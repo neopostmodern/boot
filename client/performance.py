@@ -5,7 +5,7 @@ from timeit import default_timer as timer
 from math import degrees
 from .audio import Audio
 from .exec import threadable
-from .constants import RENDER_BASE_PATH
+from .constants import RENDER_BASE_PATH, ServoConfigs
 from .midi import MIDI
 
 
@@ -127,7 +127,9 @@ class Performance:
                 elif servo_name == "croco jaw left":
                     self._hardware.crocos.jaw_left(min(28 + servo_angle * 0.7, 40))
                 elif servo_name == "croco jaw right":
-                    self._hardware.crocos.jaw_right(min(32 + servo_angle, 55))
+                    self._hardware.crocos.jaw_right(
+                        max(60 - servo_angle, ServoConfigs[servo_name].min_angle)
+                    )
                 else:
                     print(f"Unknown servo {servo_name}")
 
